@@ -41,6 +41,7 @@ def run_spark_job(spark):
     .option("subscribe", "call-centre") \
     .option("startingOffsets", "earliest") \
     .option("maxOffsetPerTrigger", "200") \
+    .option("maxRatePerPartition", 100) \    
     .load()
 
     df.printSchema()
@@ -81,7 +82,17 @@ def run_spark_job(spark):
 
     # counts_df.printSchema()
 
+    # TODO use udf to convert timestamp to right format on a call_date_time column
+    converted_df = counts_df\
+        .withColumn("call_datetime", udf_convert_time(counts_df.call_datetime))
 
+    # TODO apply aggregations using windows function to see how many calls occurred in 2 day span
+    calls_per_2_days = converted_df \
+            .groupBy(psf.window(converted_df.call_date_time, "2 day"))\
+            .agg(psf.count("crime_id").alias("calls_per_2_day"))\
+            .select("calls_per_2_day")
+
+    # TODO write output stream
     query = counts_df \
         .writeStream \
         .outputMode('complete') \
