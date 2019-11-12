@@ -2,7 +2,7 @@
 ​
 ## Introduction
 
-In this project, we use real world dataset from the kaggle repositories on San Francisco crime incidents. statistical analysis is performed on this data using Apache Spark Structured Streaming. A kafka server is used to produce and consume the data through spark structured streaming. The output of the submission is as bellow: 
+In this project, we use real world dataset from the kaggle repositories on San Francisco crime incidents. statistical analysis is performed on this data using Apache Spark Structured Streaming. A kafka server is used to produce and consume the data through spark structured streaming. The output of the submission is as bellow:
 
 ## How to run the project
 
@@ -11,6 +11,15 @@ start Zookeeper and Kafka server, and your Kafka bootstrap server using the comm
 `bin/zookeeper-server-start.sh config/zookeeper.properties`
 `bin/kafka-server-start.sh config/server.properties`
 
+To make sure that the the producer_server.py file is running correctly we can run the default consumer with the command 
+
+`./bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic call-center --from-beginning`
+
+The result can be seen in the screen capture below;
+
+
+### kafka-console-consumer.sh
+![default_consumer](./images/default.PNG)
 
 ## Create and run the `consumer_server.py`
 
